@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}
+Home
+{% endblock %}
+
+{% block body %}
+<center>
+    <div class="content" style="color:ivory; font-family: Cambria; font-size: x-large;padding-top: 7%; width: 40%;">
+        <h1>Flack</h1>
+    Want to get out of your comfort zone and interact with all the amazing people out there? <br>
+    Join us!
+    </div>
+    <br>
+    <form id="form">
+        <div class="form-group">
+            <label style="font-family: Cambria; color: ivory;">Username</label>
+            <input type="text" class="form-control" required autocomplete="off" name="username" style="width: 30%;" placeholder="Your display name">
+        </div>
+        <div class="form-group">
+            <input type="submit" id="join" class="btn btn-dark" style="width: 15%;" value="Join">
+        </div>
+    </form>
+</center>
+
+{% endblock %}
