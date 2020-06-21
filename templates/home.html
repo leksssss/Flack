@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Home</title>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<script src="/static/index.js"></script>
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(245, 236, 237);">
+    <a class="navbar-brand" href="#">FLACK</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <button class="btn btn-danger" id="del">Delete account</button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<p class="user"></p>
+{% endblock %}

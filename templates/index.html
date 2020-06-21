@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}
-Home
+{% block head %}
+<title>Flack</title>
 {% endblock %}
 
 {% block body %}
@@ -11,7 +11,7 @@ Home
     Join us!
     </div>
     <br>
-    <form id="form">
+    <form id="form" action="/" method="POST">
         <div class="form-group">
             <label style="font-family: Cambria; color: ivory;">Username</label>
             <input type="text" class="form-control" required autocomplete="off" name="username" style="width: 30%;" placeholder="Your display name">
@@ -20,6 +20,10 @@ Home
             <input type="submit" id="join" class="btn btn-dark" style="width: 15%;" value="Join">
         </div>
     </form>
+    {% if error %}
+    <p class="error" style="color: ivory;">ERROR : {{ error }}</p>
+    {% endif %}
 </center>
+
 
 {% endblock %}
