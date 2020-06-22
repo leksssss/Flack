@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block head %}
 <title>Home</title>
+<script src="/static/home.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -12,7 +13,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-item nav-link" href="/">Home</a>
+          <a class="nav-item nav-link" id="user_name" href="/">{{ username.upper() }}'s Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-item nav-link" href="/log_out">Logout</a>
@@ -31,5 +32,16 @@
 {% if not channels %}
 <center style="color: ivory;">No channels yet.</center>
 {% endif %}
-  <button id="newchannel" class="btn btn-info">+ Channel</button>
+
+  <button id="create" class="btn btn-info">+ Channel</button>
 {% endblock %}
+
+<div id="popup" style="overflow: hidden;">
+  <form method="POST">
+    <input type="text" id="channel_name" class="form-control">
+    <input type="submit" id="newchannel" class="btn btn-dark">Create</button>
+  </form>
+</div>
+<ul id="channels">
+  
+</ul>

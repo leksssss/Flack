@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Login</title>
+{% endblock %}
+
+
+{% block body %}
+<center>
+<form action="/login", method="post" >
+    <label style="color: rgb(252, 225, 245); padding-top: 8%; font-size:x-large ;"><h1>FLACK</h1>Login Here!</label>
+    <div class="form-group">
+        
+        <label style="color: ivory;">Username</label>
+        <input type="text" class="form-control" autocomplete="off" required style="width: 30%; " name="username">
+    
+    </div>
+    <div class="form-group">
+    <input type="submit" class="btn btn-danger" value="Sign In">
+    </div>
+    <a href="/join">Don't have an account yet?</a>
+</form>
+{% if error %}
+    <p class="error" style="color: ivory;"><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+</center>
+{% endblock %}
