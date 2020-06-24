@@ -33,13 +33,15 @@
 <button id="create" class="btn btn-info">+ Channel</button>
 
 {% if not channels %}
-<center style="color: ivory;">No channels yet.</center>
+  <center style="color: ivory;">No channels yet.</center>
 {% else %}
-<table id="channels">
-  {% for channel in channels %}
-  <tr><td  style="color: ivory;">{{ channel }}</td></tr>
+<p style="color: ivory;">
+  <table id="channels">
+    {% for channel in channels %}
+  <tr><td>{{ channel }}</td></tr>
   {% endfor %}
-</table>
+  </table>
+  </p>
 {% endif %}
 
 

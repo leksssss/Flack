@@ -21,6 +21,7 @@ messages={"username":None,"text": None,"time": None}
 @login_required
 def index():
     username=session["username"]
+    print(allchannels)
     return render_template("home.html",channels=allchannels,username=username)
 
 
@@ -81,6 +82,17 @@ def channel(data):
         allchannels.append(channelname)
         print(allchannels)
         emit('announce channel',{"channelname":channelname}, broadcast=True)
+
+#Deleting an account
+@socketio.on("delete account")
+def delete():
+    username=session.get('username')
+    users.remove(username)
+    session.clear()
+    print(username)
+    print(users)
+    return redirect("/login")
+    #emit('user deleted',{"username":username},broadcast=True)
 
 if __name__=='__main__':
     socketio.run(app)
