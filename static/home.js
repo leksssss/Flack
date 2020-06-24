@@ -1,38 +1,43 @@
 document.addEventListener('DOMContentLoaded',()=>{
-    document.querySelector('#popup').style.display="none";
+   document.querySelector('#popup').style.display="none";
+
     // Connect to websocket
-    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + '/');
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     // When connected, configure buttons
     socket.on('connect', () => {
-        alert(`Welcome!`);
+        //alert(`Welcome!`);
         document.querySelector('#create').onclick=()=>{
             document.getElementById('popup').style.display = 'block';
         };
-        document.querySelector('#newchannel').onclick=()=>{        
-            const channel_name= document.querySelector('#channel_name').value;
+        document.querySelector('#createbutton').onclick=()=>{        
+            var channelname= document.querySelector('#channelname').value;
             // Clear input field
-            document.querySelector('#channel_name').value = '';
+            document.querySelector('#channelname').value = '';
             // Stop form from submitting
+            document.getElementById('popup').style.display = 'none';
+            socket.emit('new channel created',{'channelname':channelname});
             return false;
+            
         };
-        socket.emit('new channel created',{'channel_name':channel_name});
+        
     });
-});
-//When a new channel is announced
-socket.on('announce channel',data =>{
-    const li=document.createElement('li');
-    li.innerHTML=`New channel ${data.channel_name} has been created`;
-    document.querySelector('#channels').append(li);
-    
-});
 
-//Function To Display Popup
-function div_show() {
-    document.getElementById('popup').style.display = 'block';
-}
+    //When a new channel is announced
+    socket.on('announce channel',data =>{
+        localStorage.setItem(`${data.channelname}`,`${data.channelname}`);
+        const li=document.createElement('li');
+        li.innerHTML=`${data.channelname}`;
+        document.querySelector('#channels').append(li);
+    });
 
-//Function to Hide Popup
-function div_hide(){
-    document.getElementById('popup').style.display = 'none';
-}
+    //If the channel exists show error message
+    socket.on('channel exists',()=>{
+        alert(`The channel already exists. Choose another name.`);
+        document.getElementById('popup').style.display = 'block';
+    });
+
+
+
+
+});

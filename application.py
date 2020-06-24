@@ -66,14 +66,21 @@ def login():
 @login_required
 def log_out():
     session.clear()
+    print(allchannels)
     return redirect('/login')
 
 #Socket listening for new channel created
 @socketio.on("new channel created")
 def channel(data):
-    channel_name=date["channel_name"]
-    allchannels.append(channel)
-    emit("announce channel",{"channel_name":channel_name}, broadcast=True)
+    channelname=data["channelname"]
+    if channelname in allchannels:
+        emit('channel exists')
+    else:
+        session['channelname']=channelname
+        session.permanent=True
+        allchannels.append(channelname)
+        print(allchannels)
+        emit('announce channel',{"channelname":channelname}, broadcast=True)
 
 if __name__=='__main__':
     socketio.run(app)
