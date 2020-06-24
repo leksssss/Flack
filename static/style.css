@@ -1,0 +1,32 @@
+@keyframes move {
+    0% {
+        left: 0%;
+    }
+    50% {
+        left: 50%;
+    }
+}
+@keyframes hide {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#popup {
+    position: relative;
+    animation-name: hide;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+.c{
+    padding-top: 3%;
+    border: 2px;
+    border-color: bisque;
+    color: ivory;
+
+}

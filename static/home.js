@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded',()=>{
-   document.querySelector('#popup').style.display="none";
-    var channels=[];
+    const a=document.querySelector('#popup');
+    a.style.animationPlayState='paused';
+    document.querySelector('#popup').style.display="none";
+    
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
@@ -8,6 +10,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     socket.on('connect', () => {
         //alert(`Welcome!`);
         document.querySelector('#create').onclick=()=>{
+            a.style.animationPlayState='running';
             document.getElementById('popup').style.display = 'block';
         };
         document.querySelector('#createbutton').onclick=()=>{        
@@ -26,12 +29,14 @@ document.addEventListener('DOMContentLoaded',()=>{
     //When a new channel is announced
     socket.on('announce channel',data =>{
         localStorage.setItem(`${data.channelname}`,`${data.channelname}`);
-        //const td=document.createElement('td');
-        const tr=document.createElement('tr');
-        tr.innerHTML=`${data.channelname}`;
-        tr.style.color="#FFFFF0";
-        //tr.innerHTML=`${td}`;
-        document.querySelector('tr').append(tr);
+        const div=document.createElement('div');
+        div.className="row";
+        const button=document.createElement('button');
+        button.className="btn btn-link";
+        var text = document.createTextNode(`${data.channelname}`);
+        button.appendChild(text);
+        const ele=div.appendChild(button);
+        document.querySelector('.container').append(ele);
     });
 
     //If the channel exists show error message
@@ -41,7 +46,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
 
     document.querySelector('#del').onclick=()=>{
-        alert("Your account will be deleted. Thank you for using FLACK");
+        alert("Your account will be deleted. Thank you for using FLACK!");
         socket.emit('delete account');
     };
 
