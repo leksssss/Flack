@@ -1,57 +1,52 @@
 document.addEventListener('DOMContentLoaded',()=>{
+    document.querySelector('#popup').style.display="none";
+    //document.querySelector('.m').style.display='none';
     const a=document.querySelector('#popup');
     a.style.animationPlayState='paused';
-    document.querySelector('#popup').style.display="none";
     
+    document.querySelector('#create').onclick=()=>{
+        a.style.animationPlayState='running';
+        document.getElementById('popup').style.display = 'block';
+    };
+
+    //alert while deleting account
+    document.querySelector('#del').onclick=()=>{
+        alert("Your account will be deleted. Thank you for using FLACK!");
+        localStorage.clear();
+        window.location=location.protocol + '//' + document.domain + ':' + location.port + '/delete';
+    };
+
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     // When connected, configure buttons
     socket.on('connect', () => {
-        //alert(`Welcome!`);
-        document.querySelector('#create').onclick=()=>{
-            a.style.animationPlayState='running';
-            document.getElementById('popup').style.display = 'block';
-        };
-        document.querySelector('#createbutton').onclick=()=>{        
-            var channelname= document.querySelector('#channelname').value;
-            // Clear input field
-            document.querySelector('#channelname').value = '';
-            // Stop form from submitting
-            document.getElementById('popup').style.display = 'none';
-            socket.emit('new channel created',{'channelname':channelname});
+    //When a channel is clicked,show its messages.
+        document.querySelectorAll('#disp').forEach(button => {
+            button.onclick=()=>{
+                document.querySelector('.m').style.display='inline';
+                const room=document.querySelector('legend').innerHTML;
+                socket.emit("join",{"room":room});
+
+        }
+    });
+
+        //When a user sends a message, emit event
+        document.querySelector('#send').onclick= ()=>{
+            const text=document.querySelector('#chat').value;
+            const ch=document.querySelector('legend').innerHTML;
+            document.querySelector('#chat').value='';
+            socket.emit('msg sent',{"text":text,"ch":ch});
+            //stop form from submitting
             return false;
-            
-        };
-        
+        }
     });
 
-    //When a new channel is announced
-    socket.on('announce channel',data =>{
-        localStorage.setItem(`${data.channelname}`,`${data.channelname}`);
-        const div=document.createElement('div');
-        div.className="row";
-        const button=document.createElement('button');
-        button.className="btn btn-link";
-        var text = document.createTextNode(`${data.channelname}`);
-        button.appendChild(text);
-        const ele=div.appendChild(button);
-        document.querySelector('.container').append(ele);
+    //On receiving new message, broadcast to everyone
+    socket.on('new message', data =>{
+        const p=document.createElement('p');
+        p.innerHTML=`${data.username} sent ${data.msg} on ${data.time}`;
+        p.style.color="ivory";
+        document.querySelector('.prev-msg').append(p);
     });
-
-    //If the channel exists show error message
-    socket.on('channel exists',()=>{
-        alert(`The channel already exists. Choose another name.`);
-        document.getElementById('popup').style.display = 'block';
-    });
-
-    document.querySelector('#del').onclick=()=>{
-        alert("Your account will be deleted. Thank you for using FLACK!");
-        socket.emit('delete account');
-    };
-
-    //Notifying that a user has deleted his account
-    //socket.on('user deleted', )
-
-
 });

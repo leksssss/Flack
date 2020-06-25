@@ -3,7 +3,7 @@
         left: 0%;
     }
     50% {
-        left: 50%;
+        left: 40%;
     }
 }
 @keyframes hide {
@@ -23,10 +23,33 @@
     animation-iteration-count: 1;
 }
 
-.c{
-    padding-top: 3%;
-    border: 2px;
-    border-color: bisque;
+.box {
+    width: 30%;
     color: ivory;
+    height: 98%;
+    margin: 1%;
+    padding: 1%;
+    border: 5px solid ivory;
+    float: left;
+  }
 
-}
+  .m{
+    width: 60%;
+    color: ivory;
+    float: right;
+    border: 1px solid ivory;
+    margin: 1%;
+    padding: 5%;
+  }
+  legend{
+      padding: 10px;
+  }
+
+  #list{
+      font-size: larger;
+      background-color:transparent;
+  }
+
+  hr{
+    border:0.2px solid rgb(177, 177, 175);
+  }

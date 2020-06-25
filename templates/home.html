@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_home.html' %}
 {% block head %}
 <title>Home</title>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
@@ -7,56 +7,53 @@
 {% endblock %}
 
 {% block body %}
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(245, 236, 237);">
-    <a class="navbar-brand" href="#">FLACK</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-item nav-link" id="user_name" href="/">{{ username.upper() }}'s Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-item nav-link" href="/log_out">Logout</a>
-        </li>
-      </ul>
-    </div>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <button class="btn btn-danger" id="del">Delete account</button>
-        </li>
-      </ul>
-    </div>
-  </nav>
 
-
-<fieldset class="c">
-  <h4> CHANNELS</h4>
-  <button id="create" class="btn btn-info">+ Channel</button><br>
+<fieldset class="box">
+  <legend> All Channels &nbsp; &nbsp;<button id="create" class="btn btn-info">+ Channel</button><br></legend>
+  
+  {% if error %}
+  <p class="error" style="color: crimson;">{{ error }}</p>
+  {% endif %}
   <div id="popup" style="overflow: hidden;">
-    <form id="newchannel">
-      <input type="text" id="channelname" required autocomplete="off" autofocus style="width: 15%;" class="form-control">
+    <form id="newchannel" action="{{ url_for('create') }}" method="POST">
+      <label style="color: ivory;">Channel Name</label>
+      <input type="text" name="channelname" required autocomplete="off"  style="width: 60%;"autofocus  class="form-control">
       <br>
       <input type="submit" id="createbutton" class="btn btn-dark" value="Create"></button>
     </form>
   </div>
-
-  {% if not channels %}
+  <br>
+  {%- if not channels -%}
     <center style="color: ivory;">No channels yet.</center>
-  {% else %}
+  {%- else -%}
     <div class="container" style="color: ivory;">
-    {% for channel in channels %}
-    <div class="row">
-      <button class="btn btn-link">
-      {{ channel }}</button>
+    {%- if channels -%}
+    {%- for channel in channels -%}
+    <hr>
+    <div class="row" id="list">
+      <form action="{{ url_for('info',cur_channel=channel) }}" method="POST"><button id="disp" class="btn btn-link" >{{ channel }}</button></form>
     </div> 
-    {% endfor %}
+    
+    {%- endfor -%}
+    {%- endif -%}
     </div>
-  {% endif %}
+  {%- endif -%}
+
 </fieldset>
 
+{% if cur_channel %}
+<fieldset class="m" style="height: 100%;">
+  <legend>{{ cur_channel }}</legend>
+  <div class="prev-msg">
+    
+  </div>
+  <form id="chat-window">
+    <textarea class="form-control" id="chat" style="width: 50%; color: thistle; background: transparent;" rows="4" required autocomplete="off" autofocus></textarea>
+    <br>
+    <button type="submit" id="send" class="btn btn-success btn-sm">Send</button>
+  </form>
+</fieldset>
+{% endif %}
 
 
 
