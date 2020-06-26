@@ -45,7 +45,12 @@
 <fieldset class="m" style="height: 100%;">
   <legend>{{ cur_channel }}</legend>
   <div class="prev-msg">
-    
+{% if channelMessages %} 
+    {% for one in channelMessages %}
+    <p>{{ one['name'] }} sent at {{ one['time'] }}</p>
+    <p>{{ one['msg'] }}</p>
+    {% endfor %}
+{% endif %}
   </div>
   <form id="chat-window">
     <textarea class="form-control" id="chat" style="width: 50%; color: thistle; background: transparent;" rows="4" required autocomplete="off" autofocus></textarea>

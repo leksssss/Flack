@@ -31,10 +31,12 @@ document.addEventListener('DOMContentLoaded',()=>{
         }
     });
 
+    
+
         //When a user sends a message, emit event
         document.querySelector('#send').onclick= ()=>{
             const text=document.querySelector('#chat').value;
-            const ch=document.querySelector('legend').innerHTML;
+            const ch=document.querySelector('.m').querySelector('legend').innerHTML;
             document.querySelector('#chat').value='';
             socket.emit('msg sent',{"text":text,"ch":ch});
             //stop form from submitting
@@ -44,9 +46,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     //On receiving new message, broadcast to everyone
     socket.on('new message', data =>{
+        var obj=data
         const p=document.createElement('p');
-        p.innerHTML=`${data.username} sent ${data.msg} on ${data.time}`;
+        p.innerHTML=`${obj.name} sent ${obj.msg} on ${obj.time}`;
         p.style.color="ivory";
         document.querySelector('.prev-msg').append(p);
+        
+        
     });
 });
