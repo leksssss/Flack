@@ -136,7 +136,7 @@ def on_leave(data):
 def message(data):
     channel=data["ch"]
     x=datetime.datetime.now()
-    time=x.strftime("%X")
+    time=x.strftime("%c")
     content={}
     content['name']=session.get('username')
     content['time']=time

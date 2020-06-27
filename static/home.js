@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         //When a user sends a message, emit event
         document.querySelector('#send').onclick= ()=>{
             const text=document.querySelector('#chat').value;
-            const ch=document.querySelector('.m').querySelector('legend').innerHTML;
+            const ch=document.querySelector('.m').querySelector('.curchannel').innerHTML;
             document.querySelector('#chat').value='';
             socket.emit('msg sent',{"text":text,"ch":ch});
             //stop form from submitting
@@ -47,11 +47,26 @@ document.addEventListener('DOMContentLoaded',()=>{
     //On receiving new message, broadcast to everyone
     socket.on('new message', data =>{
         var obj=data
-        const p=document.createElement('p');
-        p.innerHTML=`${obj.name} sent ${obj.msg} on ${obj.time}`;
-        p.style.color="ivory";
-        document.querySelector('.prev-msg').append(p);
-        
+        const p1=document.createElement('p');
+        const p2=document.createElement('p');
+        p1.innerHTML=`${obj.name} - ${obj.time}`;
+        p2.innerHTML=`${obj.msg}`
+        p1.style.color=randColor();
+        p2.style.color="ivory";
+        p1.append(p2);
+        document.querySelector('.prev-msg').append(p1);
         
     });
+
+    document.querySelectorAll('.color').forEach( p => {
+        p.style.color=randColor();
+    });
+
+    function randColor() {
+        let x = Math.floor(Math.random() * 256);
+        let y = Math.floor(Math.random() * 256);
+        let z = Math.floor(Math.random() * 256);
+        return "rgb(" + x + "," + y + "," + z + ")";
+    }
+
 });
