@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     //alert while deleting account
     document.querySelector('#del').onclick=()=>{
         alert("Your account will be deleted. Thank you for using FLACK!");
-        localStorage.clear();
+        window.localStorage.clear();
         window.location=location.protocol + '//' + document.domain + ':' + location.port + '/delete';
     };
 
@@ -21,27 +21,60 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     // When connected, configure buttons
     socket.on('connect', () => {
-    //When a channel is clicked,show its messages.
-        document.querySelectorAll('#disp').forEach(button => {
-            button.onclick=()=>{
-                document.querySelector('.m').style.display='inline';
-                const room=document.querySelector('legend').innerHTML;
+    //When a join is clicked,show user has joined.
+        document.querySelector('#join').onclick=() => {
+            const room=document.querySelector('.m').querySelector('.curchannel').innerHTML;
+            if(!window.localStorage.getItem(`${room}`)){
+                window.localStorage.setItem(`${room}`,`${room}`);
                 socket.emit("join",{"room":room});
+            }
+            else
+                alert("You're already a member!");
+        };
 
-        }
-    });
-
-    
+        //When leave is clicked, show user has left and clear localstorage
+        document.querySelector('#leave').onclick =()=>{    
+            const room=document.querySelector('.m').querySelector('.curchannel').innerHTML;
+            if(!window.localStorage.getItem(`${room}`)){
+               alert("You need to join the channel");
+            }
+            else{
+                window.localStorage.removeItem(`${room}`);
+                socket.emit('leave',{"room":room});
+            }
+        };
 
         //When a user sends a message, emit event
         document.querySelector('#send').onclick= ()=>{
             const text=document.querySelector('#chat').value;
             const ch=document.querySelector('.m').querySelector('.curchannel').innerHTML;
-            document.querySelector('#chat').value='';
-            socket.emit('msg sent',{"text":text,"ch":ch});
-            //stop form from submitting
-            return false;
-        }
+            if(window.localStorage.getItem(`${ch}`)){    
+                document.querySelector('#chat').value='';
+                socket.emit('msg sent',{"text":text,"ch":ch});
+                //stop form from submitting
+                return false;
+            }
+            else
+                alert("You need to join the channel to start chatting.");
+        };
+    });
+
+    //When a user joins, broadcast to everyone in the channel
+    socket.on('join event',data => {
+        const p=document.createElement('p');
+        p.innerHTML=`${data.username} has joined. Nice to have you here in ${data.room}`;
+        p.style.color="ivory";
+        p.style.fontStyle="italic";
+        document.querySelector('.prev-msg').append(p);
+    });
+
+    //When user leaves,show the message
+    socket.on('leave event',data => {
+        const p=document.createElement('p');
+        p.innerHTML=`${data.username} has left ${data.room}`;
+        p.style.color="ivory";
+        p.style.fontStyle="italic";
+        document.querySelector('.prev-msg').append(p);
     });
 
     //On receiving new message, broadcast to everyone
@@ -58,10 +91,12 @@ document.addEventListener('DOMContentLoaded',()=>{
         
     });
 
+    //assigning random colors to usernames
     document.querySelectorAll('.color').forEach( p => {
         p.style.color=randColor();
     });
 
+    //function to generate random colors
     function randColor() {
         let x = Math.floor(Math.random() * 256);
         let y = Math.floor(Math.random() * 256);
