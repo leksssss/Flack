@@ -1,3 +1,3 @@
-# Project 2
+# FLACK
 
-Web Programming with Python and JavaScript
+Online messaging sevice similar in spirit to Slack.
